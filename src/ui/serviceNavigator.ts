@@ -54,3 +54,12 @@ export function getCurrentService(
 export function getTotalServices(state: ServiceNavigatorState): number {
   return state.serviceNames.length;
 }
+
+/**
+ * Returns a human-readable position string for the current service,
+ * e.g. "2 / 5". Returns null if there are no services.
+ */
+export function getPositionLabel(state: ServiceNavigatorState): string | null {
+  if (state.serviceNames.length === 0 || state.currentIndex < 0) return null;
+  return `${state.currentIndex + 1} / ${state.serviceNames.length}`;
+}
