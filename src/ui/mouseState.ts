@@ -81,3 +81,20 @@ export function isDoubleClick(state: MouseState, event: MouseEvent): boolean {
     state.clickCount >= 1
   );
 }
+
+/**
+ * Returns true if the given coordinates fall within the specified rectangular
+ * region (inclusive on all edges).
+ */
+export function isWithinBounds(
+  x: number,
+  y: number,
+  region: { x: number; y: number; width: number; height: number }
+): boolean {
+  return (
+    x >= region.x &&
+    x < region.x + region.width &&
+    y >= region.y &&
+    y < region.y + region.height
+  );
+}
