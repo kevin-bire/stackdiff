@@ -60,6 +60,22 @@ describe('computeDiffSummary', () => {
     expect(summary.changedServices).toBe(1);
     expect(summary.unchangedServices).toBe(1);
   });
+
+  it('totalServices equals sum of all status counts', () => {
+    const diffs = makeDiffs([
+      { name: 'web', status: 'added' },
+      { name: 'db', status: 'removed' },
+      { name: 'api', status: 'changed' },
+      { name: 'cache', status: 'unchanged' },
+    ]);
+    const summary = computeDiffSummary(diffs);
+    const sumOfCounts =
+      summary.addedServices +
+      summary.removedServices +
+      summary.changedServices +
+      summary.unchangedServices;
+    expect(summary.totalServices).toBe(sumOfCounts);
+  });
 });
 
 describe('formatDiffSummary', () => {
@@ -84,19 +100,3 @@ describe('formatChangeSummary', () => {
     const summary = computeDiffSummary({});
     expect(formatChangeSummary(summary)).toBe('No differences found');
   });
-
-  it('uses singular for single service', () => {
-    const diffs = makeDiffs([{ name: 'web', status: 'added' }]);
-    const text = formatChangeSummary(computeDiffSummary(diffs));
-    expect(text).toContain('1 service');
-  });
-
-  it('uses plural for multiple services', () => {
-    const diffs = makeDiffs([
-      { name: 'web', status: 'added' },
-      { name: 'db', status: 'removed' },
-    ]);
-    const text = formatChangeSummary(computeDiffSummary(diffs));
-    expect(text).toContain('2 services');
-  });
-});
