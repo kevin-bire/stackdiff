@@ -34,6 +34,16 @@ export function buildFilterHintText(): string {
   return '{grey-fg}[f] cycle filter  [/] search  [esc] clear{/}';
 }
 
+/**
+ * Returns the next filter mode in the cycle order:
+ * all -> changed -> added -> removed -> all
+ */
+export function cycleFilterMode(current: FilterMode): FilterMode {
+  const order: FilterMode[] = ['all', 'changed', 'added', 'removed'];
+  const idx = order.indexOf(current);
+  return order[(idx + 1) % order.length];
+}
+
 export function applyFilterToLines(lines: string[], state: FilterState): string[] {
   if (state.mode === 'all' && !state.searchQuery && !state.activeServiceFilter) {
     return lines;
