@@ -27,7 +27,10 @@ export function resolveGitBranchSource(branch: string, filePath: string): Resolv
     });
     return { label: `${branch}:${filePath}`, content, type: 'git-branch' };
   } catch (err) {
-    throw new Error(`Could not read ${filePath} from branch ${branch}: ${(err as Error).message}`);
+    const message = (err as Error).message ?? String(err);
+    const stderr = message.match(/stderr: (.+)/)?.[1];
+    const detail = stderr ?? message.split('\n')[0];
+    throw new Error(`Could not read '${filePath}' from branch '${branch}': ${detail}`);
   }
 }
 
