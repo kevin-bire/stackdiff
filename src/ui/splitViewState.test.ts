@@ -24,6 +24,12 @@ describe("createSplitViewState", () => {
     const s = createSplitViewState();
     expect(s.focusedPane).toBe("left");
   });
+
+  it("defaults labels to empty strings when not provided", () => {
+    const s = createSplitViewState();
+    expect(s.leftLabel).toBe("");
+    expect(s.rightLabel).toBe("");
+  });
 });
 
 describe("toggleViewMode", () => {
@@ -40,6 +46,24 @@ describe("toggleViewMode", () => {
   it("does not mutate original state", () => {
     const s = createSplitViewState();
     toggleViewMode(s);
+    expect(s.mode).toBe("unified");
+  });
+});
+
+describe("setViewMode", () => {
+  it("sets mode to split", () => {
+    const s = setViewMode(createSplitViewState(), "split");
+    expect(s.mode).toBe("split");
+  });
+
+  it("sets mode to unified", () => {
+    const s = setViewMode(createSplitViewState(), "split");
+    expect(setViewMode(s, "unified").mode).toBe("unified");
+  });
+
+  it("does not mutate original state", () => {
+    const s = createSplitViewState();
+    setViewMode(s, "split");
     expect(s.mode).toBe("unified");
   });
 });
